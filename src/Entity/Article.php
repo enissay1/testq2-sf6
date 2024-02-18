@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Repository\ArticleRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\Serializer\Annotation\Ignore;
 
 #[ORM\Entity(repositoryClass: ArticleRepository::class)]
 class Article
@@ -11,18 +13,23 @@ class Article
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Ignore]
     private ?int $id = null;
 
     #[ORM\Column(length: 255, unique: true)]
+    #[Groups(['csv'])]
     private ?string $reference = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['csv'])]
     private ?string $designation = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['csv'])]
     private ?int $quantite = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['csv'])]
     private ?int $prix = null;
 
     public function getId(): ?int
