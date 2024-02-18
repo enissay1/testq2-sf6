@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}CSV index{% endblock %}
+
+{% block body %}
+    <h1>Liste file csv</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>date</th>
+               
+            </tr>
+        </thead>
+        <tbody>
+        {% for file in files %}
+            <tr>
+                <td>{{ file.name}}</td>
+                <td>{{ file.date}}</td>
+               
+                <td>
+                        <a href="{{ path('app_file_csv', {'nameFile': file.name}) }}">importer</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8">no files found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+        <button class="btn" > <a   href="{{ path('app_folder_csv') }}">Import All files</a></button>
+
+
+  
+{% endblock %}

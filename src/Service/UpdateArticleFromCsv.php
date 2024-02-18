@@ -10,19 +10,24 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 class UpdateArticleFromCsv
 {
+    private bool $flashed;
 
+    public function getFlashed(): ?bool
+    {
+        return $this->flashed;
+    }
     public function __construct(private SerializerInterface $serializer, private ParameterBagInterface $params, private EntityManagerInterface $entityManager)
     {
     }
-    public function updateDb(string $pathCsv, $flashed = true)
+    public function updateDb(string $pathCsv)
     {
-
         $csvData = file_get_contents($pathCsv);
 
         $articles = $this->serializer->deserialize($csvData, Article::class . '[]', 'csv', ["groups" => ["csv"]]);
         // dump($pathCsv, $articles);
         foreach ($articles as $article) {
             if ($article->getReference()) {
+                $this->flashed = true;
                 $articledb = $this->entityManager->getRepository(Article::class)
                     ->findOneBy(['reference' => $article->getReference()]);
                 if ($articledb) {
@@ -33,10 +38,10 @@ class UpdateArticleFromCsv
                     // Persistez l'objet Article dans la base de données
                     $this->entityManager->persist($article);
                 }
-            }
+            } else $this->flashed = false;
         }
         // Flush pour sauvegarder les changements
-        if ($flashed)
+        if ($this->flashed)
             $this->entityManager->flush();
     }
 }
