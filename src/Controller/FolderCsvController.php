@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class FolderCsvController extends AbstractController
 {
-    #[Route('/folder/listcsv', name: 'app_import_listcsv')]
+    #[Route('/', name: 'app_import_listcsv')]
     public function index(ParameterBagInterface $params): Response
     {
 
